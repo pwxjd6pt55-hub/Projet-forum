@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription - Gallery la fayette</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1>Gallery la fayette</h1>
+      <h2>Inscription</h2>
+      <p>Crée ton compte pour participer à la Gallery.</p>
+
+      <form class="auth-form" id="registerForm">
+        <input type="text" id="registerUsername" placeholder="Nom d'utilisateur" required />
+        <input type="email" id="registerEmail" placeholder="Adresse e-mail" required />
+        <input type="password" id="registerPassword" placeholder="Mot de passe" required />
+        <button type="submit" class="btn primary">S’inscrire</button>
+      </form>
+
+      <p class="auth-link">
+        Déjà inscrit ? <a href="login.html">Se connecter</a>
+      </p>
+
+      <a href="index.html" class="back-link">← Retour à l’accueil</a>
+    </div>
+  </div>
+
+  <script>
+    // Fonction utilitaire pour afficher des notifications Toast premium
+    function showToast(message, type = "success") {
+      let container = document.getElementById("toast-container");
+      if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+
+      let icon = "🔔";
+      if (type === "success") icon = "✅";
+      else if (type === "error") icon = "❌";
+      else if (type === "info") icon = "ℹ️";
+      else if (type === "warning") icon = "⚠️";
+
+      toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add("fade-out");
+        toast.addEventListener("animationend", () => {
+          toast.remove();
+        });
+      }, 3000);
+    }
+
+    const registerForm = document.getElementById("registerForm");
+
+    registerForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("registerUsername").value.trim();
+      const email = document.getElementById("registerEmail").value.trim();
+      const password = document.getElementById("registerPassword").value.trim();
+
+      if (!username || !email || !password) {
+        showToast("Tous les champs sont obligatoires", "error");
+        return;
+      }
+
+      const button = registerForm.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Inscription...";
+
+      try {
+        const response = await fetch("/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showToast(data.message, "success");
+          // Petit délai avant redirection pour apprécier la notification success
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1200);
+        } else {
+          showToast(data.error, "error");
+        }
+      } catch (error) {
+        showToast("Erreur de connexion au serveur", "error");
+      }
+
+      button.disabled = false;
+      button.textContent = "S’inscrire";
+    });
+  </script>
+</body>
+</html>_

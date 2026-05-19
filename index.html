@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery la fayette - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Gallery<span>la fayette</span></div>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#" id="navHome" class="active">Accueil</a></li>
+        <li><a href="#" id="navMyPosts">Mes posts</a></li>
+        <li><a href="#" id="navLikedPosts">Posts aimés</a></li>
+      </ul>
+    </nav>
+
+    <div class="auth-buttons">
+      <div id="authButtons" class="auth-buttons-container">
+        <a href="login.html" class="btn secondary">Connexion</a>
+        <a href="register.html" class="btn primary">Inscription</a>
+      </div>
+      <div id="userSection" class="user-section" style="display: none;">
+        <span id="username" class="username"></span>
+        <button id="logoutBtn" class="btn secondary">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <aside class="sidebar">
+      <h3>Filtres</h3>
+
+      <div class="filter-group" style="margin-bottom: 15px;">
+        <label for="searchInput" style="display: block; margin-bottom: 5px; color: #ccc; font-size: 0.9rem;">Rechercher un mot-clé</label>
+        <input type="text" id="searchInput" placeholder="Rechercher..." style="color: #fff; background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 8px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.1);" />
+      </div>
+
+      <div class="filter-group">
+        <label for="categoryFilter">Catégorie</label>
+        <select id="categoryFilter">
+          <option value="all">Toutes</option>
+          <option value="tech">Tech</option>
+          <option value="gaming">Gaming</option>
+          <option value="sport">Sport</option>
+          <option value="education">Éducation</option>
+          <option value="beaute">Beauté</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <button class="btn full">Mes publications</button>
+      </div>
+
+      <div class="filter-group">
+        <button class="btn full">Publications aimées</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <section class="hero">
+        <h1>Bienvenue sur Gallery la fayette</h1>
+        <p>Partage tes idées, commente les publications et réagis avec des likes et dislikes.</p>
+      </section>
+
+      <section class="create-post">
+        <h2>Créer une publication</h2>
+        <form id="postForm">
+          <input type="text" id="postTitle" placeholder="Titre du post" required />
+          <textarea id="postContent" rows="5" placeholder="Exprime-toi..." required></textarea>
+
+          <select id="postCategory" required>
+            <option value="tech">Tech</option>
+            <option value="gaming">Gaming</option>
+            <option value="sport">Sport</option>
+            <option value="education">Éducation</option>
+            <option value="beaute">Beauté</option>
+          </select>
+          
+          <div class="file-upload-group" style="margin-bottom: 15px;">
+            <label for="postImage" style="display: block; margin-bottom: 5px; color: #ccc; font-size: 0.9rem;">Ajouter une image (optionnel)</label>
+            <input type="file" id="postImage" accept="image/*" class="file-input" style="color: #fff; background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 8px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.1);" />
+            <img id="imagePreview" src="" alt="Aperçu" style="display: none; max-width: 100%; border-radius: 8px; margin-top: 10px; max-height: 200px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);" />
+          </div>
+
+          <button type="submit" class="btn primary">Publier</button>
+        </form>
+      </section>
+
+      <section class="posts-section">
+        <h2>Publications récentes</h2>
+
+        <div id="postsContainer">
+          <article class="post-card" data-category="tech">
+            <div class="post-header">
+              <h3>Bienvenue sur Gallery la fayette</h3>
+              <span class="category">Tech</span>
+            </div>
+
+            <p class="post-meta">Publié par <strong>Admin</strong> • aujourd’hui</p>
+            <p class="post-text">
+              Ceci est le premier post de Gallery la fayette. Vous pouvez commenter, aimer et filtrer les publications.
+            </p>
+
+            <div class="post-actions">
+              <button class="like-btn">👍 <span>5</span></button>
+              <button class="dislike-btn">👎 <span>1</span></button>
+              <button class="comment-toggle">💬 Commentaires</button>
+            </div>
+
+            <div class="comments">
+              <div class="comment"><strong>Sara :</strong> Très belle interface.</div>
+              <div class="comment"><strong>Ali :</strong> Hâte de voir la suite.</div>
+
+              <form class="comment-form">
+                <input type="text" placeholder="Ajouter un commentaire..." />
+                <button type="submit" class="btn secondary">Envoyer</button>
+              </form>
+            </div>
+          </article>
+
+          <article class="post-card" data-category="gaming">
+            <div class="post-header">
+              <h3>Votre boutique préférée aux Galeries ?</h3>
+              <span class="category">Gaming</span>
+            </div>
+
+            <p class="post-meta">Publié par <strong>Youssef</strong> • aujourd’hui</p>
+            <p class="post-text">
+              Venez partager vos meilleures boutiques et marques du moment.
+            </p>
+
+            <div class="post-actions">
+              <button class="like-btn">👍 <span>8</span></button>
+              <button class="dislike-btn">👎 <span>0</span></button>
+              <button class="comment-toggle">💬 Commentaires</button>
+            </div>
+
+            <div class="comments">
+              <form class="comment-form">
+                <input type="text" placeholder="Ajouter un commentaire..." />
+                <button type="submit" class="btn secondary">Envoyer</button>
+              </form>
+            </div>
+          </article>
+        </div>
+
+        <!-- État vide (Empty State) en cas de recherche ou de filtre infructueux -->
+        <div id="noResultsState" class="no-results-card hidden">
+          <h3>Aucune publication trouvée</h3>
+          <p>Aucun post ne correspond à votre recherche ou à vos filtres actuels.</p>
+          <button id="resetFiltersBtn" class="btn secondary">Réinitialiser les filtres</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        Gallery<span>la fayette</span>
+      </div>
+      <p class="footer-tagline">L'espace d'échange chic & élégant.</p>
+      <div class="footer-links">
+        <a href="#">Confidentialité</a>
+        <a href="#">Mentions Légales</a>
+        <a href="#">Aide</a>
+      </div>
+      <p class="footer-copyright">© 2026 Gallery la fayette. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
