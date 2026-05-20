@@ -19,32 +19,32 @@ let activeFilterType = "category"; // Type de filtre actif ("category", "my-post
 /**
  * Génère un avatar en HTML (rond coloré avec initiale) basé sur le nom d'utilisateur.
  * Calcule un code couleur unique et stable à partir des lettres du pseudo.
- * @param {string} username - Pseudo de l'utilisateur.
- * @param {number} size - Taille en pixels du rond (par défaut 36px).
+ * username - Pseudo de l'utilisateur.
+ * - Taille en pixels du rond (par défaut 36px).
  */
 function getAvatar(username, size = 36) {
   const firstLetter = username ? username.charAt(0).toUpperCase() : '?';
-  
+
   // Algorithme de hachage simple basé sur les codes caractères pour générer une couleur stable
   let hash = 0;
   for (let i = 0; i < username.length; i++) {
     hash = username.charCodeAt(i) + ((hash << 5) - hash);
   }
-  
+
   // Liste de superbes couleurs modernes en HSL/Hex
   const colors = ["#6366f1", "#a855f7", "#ec4899", "#f43f5e", "#10b981", "#14b8a6", "#f59e0b", "#3b82f6"];
   const colorIndex = Math.abs(hash) % colors.length;
   const bgColor = colors[colorIndex];
   const fontSize = size === 36 ? '1rem' : '0.75rem';
-  
+
   // Renvoie le badge HTML formaté
   return `<div class="avatar" style="background-color: ${bgColor}; display: inline-flex; align-items: center; justify-content: center; width: ${size}px; height: ${size}px; border-radius: 50%; color: #fff; font-weight: bold; font-size: ${fontSize}; margin-right: 8px; border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;">${firstLetter}</div>`;
 }
 
 /**
  * Affiche une notification Toast premium et temporaire à l'écran.
- * @param {string} message - Le texte du message à afficher.
- * @param {string} type - Le type de notification ('success', 'error', 'info', 'warning').
+ *message - Le texte du message à afficher.
+ * type - Le type de notification ('success', 'error', 'info', 'warning').
  */
 function showToast(message, type = "success") {
   // Récupération ou création du conteneur de toasts dans le DOM
@@ -61,10 +61,10 @@ function showToast(message, type = "success") {
 
   // Icône adaptée selon le type
   let icon = "🔔";
-  if (type === "success") icon = "✅";
-  else if (type === "error") icon = "❌";
-  else if (type === "info") icon = "ℹ️";
-  else if (type === "warning") icon = "⚠️";
+  if (type === "success") icon = "";
+  else if (type === "error") icon = "";
+  else if (type === "info") icon = "";
+  else if (type === "warning") icon = "";
 
   toast.innerHTML = `
     <span class="toast-icon">${icon}</span>
@@ -85,7 +85,7 @@ function showToast(message, type = "success") {
 
 /**
  * Synchronise et met à jour l'état visuel actif de la navbar et de la sidebar.
- * @param {string} filterType - Le type de filtre actif ('category', 'my-posts', 'liked-posts').
+ * filterType - Le type de filtre actif ('category', 'my-posts', 'liked-posts').
  */
 function updateActiveNavigation(filterType) {
   // Retire la classe 'active' de tous les onglets de la navbar supérieure
@@ -136,11 +136,11 @@ async function getCurrentUser() {
     if (res.ok) {
       currentUser = await res.json();
       console.log("Utilisateur connecté :", currentUser);
-      
+
       const authButtons = document.getElementById("authButtons");
       const userSection = document.getElementById("userSection");
       const username = document.getElementById("username");
-      
+
       // Bascule de l'interface en mode "Connecté"
       if (authButtons) authButtons.style.display = "none";
       if (userSection) userSection.style.display = "flex";
@@ -167,20 +167,20 @@ async function logout() {
       method: "POST",
       credentials: "include"
     });
-    
+
     if (res.ok) {
       currentUser = null;
-      
+
       const authButtons = document.getElementById("authButtons");
       const userSection = document.getElementById("userSection");
       if (authButtons) authButtons.style.display = "flex";
       if (userSection) userSection.style.display = "none";
-      
+
       // Réinitialise les variables locales
       allPosts = [];
       const categoryFilter = document.getElementById("categoryFilter");
       if (categoryFilter) categoryFilter.value = "all";
-      
+
       loadPosts(); // Recharge les publications de façon anonyme
       showToast("Déconnexion réussie", "success");
     } else {
@@ -204,12 +204,12 @@ async function loadPosts() {
   try {
     console.log('Chargement des publications...');
     const res = await fetch("/posts");
-    
+
     if (!res.ok) {
       console.error('Erreur API lors de la récupération des posts:', res.status);
       return;
     }
-    
+
     const posts = await res.json();
     allPosts = posts; // Enregistre en mémoire locale pour le filtrage
     renderPosts(posts); // Rendu à l'écran
@@ -220,7 +220,7 @@ async function loadPosts() {
 
 /**
  * Construit et injecte dynamiquement les cartes HTML de chaque publication dans le DOM.
- * @param {Array} posts - Tableau de posts à dessiner.
+ *posts - Tableau de posts à dessiner.
  */
 async function renderPosts(posts) {
   postsContainer.innerHTML = ""; // Vide le conteneur actuel
@@ -289,7 +289,7 @@ async function renderPosts(posts) {
 
 /**
  * Filtre les posts affichés à l'écran en combinant l'onglet actif et le mot-clé de recherche.
- * @param {string} type - Nouveau type de filtre à appliquer (facultatif).
+ * type - Nouveau type de filtre à appliquer (facultatif).
  */
 function filterPosts(type) {
   if (type) {
@@ -353,8 +353,8 @@ function filterPosts(type) {
 
 /**
  * Envoie une réaction de Like/Dislike au serveur.
- * @param {number} postId - ID de la publication.
- * @param {string} type - Type de réaction ('like' ou 'dislike').
+ * postId - ID de la publication.
+ * type - Type de réaction ('like' ou 'dislike').
  */
 async function reactPost(postId, type) {
   try {
@@ -381,7 +381,7 @@ async function reactPost(postId, type) {
 /**
  * Supprime physiquement une publication via l'API DELETE /posts/:id.
  * Appelé uniquement par l'auteur après confirmation.
- * @param {number} postId - ID de la publication.
+ * postId - ID de la publication.
  */
 async function deletePost(postId) {
   try {
@@ -389,7 +389,7 @@ async function deletePost(postId) {
       method: "DELETE",
       credentials: "include"
     });
-    
+
     const result = await res.json();
     if (res.ok) {
       showToast("Publication supprimée avec succès !", "success");
@@ -409,8 +409,8 @@ async function deletePost(postId) {
 
 /**
  * Envoie un nouveau commentaire au serveur pour une publication donnée.
- * @param {number} postId - ID de la publication.
- * @param {string} content - Contenu textuel du commentaire.
+ * postId - ID de la publication.
+ *  content - Contenu textuel du commentaire.
  */
 async function addComment(postId, content) {
   try {
@@ -436,7 +436,7 @@ async function addComment(postId, content) {
 
 /**
  * Charge tous les commentaires d'une publication, met à jour le compteur dynamique et affiche la liste.
- * @param {number} postId - ID de la publication.
+ * postId - ID de la publication.
  */
 async function loadComments(postId) {
   try {
@@ -456,7 +456,7 @@ async function loadComments(postId) {
         container.innerHTML = `<p style="color: #666; font-size: 0.9rem; font-style: italic; margin: 10px 0;">Aucun commentaire pour le moment.</p>`;
         return;
       }
-      
+
       // Injecte le code HTML de chaque commentaire avec son avatar
       container.innerHTML = comments.map(c => `
         <div class="comment" style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 8px;">
@@ -482,7 +482,7 @@ async function loadComments(postId) {
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Initialise l'identité utilisateur de la session
   await getCurrentUser();
-  
+
   // 2. Charge les publications
   loadPosts();
 
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         showToast("Vous devez être connecté pour voir vos publications", "error");
       }
     });
-    
+
     filterButtons[1].addEventListener('click', () => {
       if (currentUser) {
         filterPosts("liked-posts");
@@ -577,13 +577,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 7. Aperçu dynamique de l'image sélectionnée
   const postImageInput = document.getElementById("postImage");
   const imagePreview = document.getElementById("imagePreview");
-  
+
   if (postImageInput && imagePreview) {
-    postImageInput.addEventListener("change", function() {
+    postImageInput.addEventListener("change", function () {
       const file = this.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           imagePreview.src = e.target.result;
           imagePreview.style.display = "block"; // Affiche l'aperçu
         }
