@@ -22,13 +22,7 @@ const sessions = {};
 // FONCTIONS UTILITAIRES / MIDDLEWARES MAISON
 // ==========================================
 
-/**
- * Envoie une réponse formatée en JSON au format standardisé.
- * Ajoute également les en-têtes nécessaires pour le CORS (partage des ressources d'origines différentes).
- * @param {object} res - Objet Response HTTP de Node.
- * @param {number} statusCode - Code de statut HTTP (200, 201, 400, etc.).
- * @param {object} data - Objet JavaScript à sérialiser en JSON.
- */
+// Envoie du JSON au client
 function sendJson(res, statusCode, data) {
   res.writeHead(statusCode, {
     "Content-Type": "application/json",
@@ -40,12 +34,7 @@ function sendJson(res, statusCode, data) {
   res.end(JSON.stringify(data));
 }
 
-/**
- * Lit et parse le corps textuel (body) d'une requête POST/PUT en asynchrone.
- * Reconstruit le flux de buffers reçus et le convertit en objet JSON.
- * @param {object} req - Objet Request HTTP de Node.
- * @returns {Promise<object>} Promesse résolue avec l'objet JSON parsé.
- */
+// Parse le corps de la requête
 function parseBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -68,11 +57,7 @@ function parseBody(req) {
   });
 }
 
-/**
- * Analyse et extrait les cookies contenus dans les en-têtes HTTP du navigateur.
- * @param {object} req - Objet Request HTTP de Node.
- * @returns {object} Dictionnaire des cookies { nom: valeur }.
- */
+// Parse les cookies
 function parseCookies(req) {
   const header = req.headers.cookie;
   const cookies = {};
@@ -90,19 +75,14 @@ function parseCookies(req) {
   return cookies;
 }
 
-/**
- * Fonction maîtresse pour servir les fichiers statiques de ton frontend (HTML, CSS, JS, Images).
- * Lit le fichier demandé sur le disque dur et le retourne avec le Content-Type adapté.
- * @param {object} res - Objet Response HTTP.
- * @param {string} pathname - Chemin d'accès demandé (ex: "/style.css").
- */
+// Envoie les fichiers statiques (images, scripts, styles...)
 function serveStatic(res, pathname) {
   // Par défaut, redirige la racine "/" vers le fichier principal "/index.html"
   let filePath = pathname === "/" ? "/index.html" : pathname;
   filePath = path.join(PUBLIC_DIR, decodeURIComponent(filePath));
 
   const ext = path.extname(filePath).toLowerCase();
-  
+
   // Dictionnaire de correspondances pour les extensions
   const contentTypes = {
     ".html": "text/html",
@@ -134,11 +114,7 @@ function serveStatic(res, pathname) {
   });
 }
 
-/**
- * Récupère l'utilisateur en mémoire vive correspondant au cookie sessionId fourni par la requête.
- * @param {object} req - Objet Request HTTP.
- * @returns {object|null} L'objet utilisateur de session ou null si non connecté.
- */
+
 function getUserFromSession(req) {
   const cookies = parseCookies(req);
   const sessionId = cookies.sessionId;
@@ -251,7 +227,7 @@ const server = http.createServer(async (req, res) => {
         }
 
         const user = results[0];
-        
+
         // Compare le mot de passe en clair envoyé avec le hash de la BDD
         const valid = await bcrypt.compare(password, user.password);
 
@@ -370,12 +346,12 @@ const server = http.createServer(async (req, res) => {
           const buffer = Buffer.from(matches[2], 'base64'); // Re-décodage en binaire brut
           const fileName = uuidv4() + '.' + (ext === 'jpeg' ? 'jpg' : ext); // Donne un nom unique
           const uploadDir = path.join(PUBLIC_DIR, 'uploads');
-          
+
           // Crée le sous-dossier de stockage sur le disque dur s'il n'existe pas
           if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
           }
-          
+
           // Enregistre le fichier physiquement sur le disque
           fs.writeFileSync(path.join(uploadDir, fileName), buffer);
           imageUrl = '/uploads/' + fileName; // Chemin à enregistrer en base
