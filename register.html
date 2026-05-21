@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -46,11 +48,11 @@
       const toast = document.createElement("div");
       toast.className = `toast toast-${type}`;
 
-      let icon = "🔔";
-      if (type === "success") icon = "✅";
-      else if (type === "error") icon = "❌";
-      else if (type === "info") icon = "ℹ️";
-      else if (type === "warning") icon = "⚠️";
+      let icon = "";
+      if (type === "success") icon = "";
+      else if (type === "error") icon = "";
+      else if (type === "info") icon = "";
+      else if (type === "warning") icon = "";
 
       toast.innerHTML = `
         <span class="toast-icon">${icon}</span>
@@ -114,4 +116,5 @@
     });
   </script>
 </body>
+
 </html>_
