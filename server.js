@@ -244,14 +244,14 @@ const server = http.createServer(async (req, res) => {
           email: user.email
         };
 
-        // Définit le cookie sessionId de façon HttpOnly pour contrer les failles XSS
+        // Définit le cookie sessionId de façon HttpOnly pour contrer les failles XSS (avec expiration de 24h)
         res.writeHead(200, {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": "true",
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Set-Cookie": `sessionId=${sessionId}; HttpOnly; Path=/`
+          "Set-Cookie": `sessionId=${sessionId}; HttpOnly; Path=/; Max-Age=86400`
         });
 
         res.end(JSON.stringify({
